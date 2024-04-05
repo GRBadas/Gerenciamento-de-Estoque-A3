@@ -5,6 +5,8 @@ import badas.dev.gerenciamento.de.estoque.repository.ProdutoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProdutoService {
 
@@ -19,5 +21,9 @@ public class ProdutoService {
             throw new IllegalArgumentException("A quantidade do produto não pode ser negativa");
         }
         return produtoRepositorio.save(produto);
+    }
+
+    public List<Produto> getAllprodutos() {
+        return produtoRepositorio.findAll();
     }
 }
