@@ -7,7 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class ProdutoServiceTest {
@@ -27,8 +29,8 @@ public class ProdutoServiceTest {
         Produto produtoAdicionado = produtoService.addProduto(produtoParaAdicionar);
 
         assertNotNull(produtoAdicionado);
-        assertEquals("Product Name", produtoAdicionado.getName());
-        assertEquals(10, produtoAdicionado.getQuantity());
+        assertEquals("Nome do produto", produtoAdicionado.getNome());
+        assertEquals(10, produtoAdicionado.getQuantidade());
         verify(produtoRepositorio, times(1)).save(produtoParaAdicionar);
     }
 }
