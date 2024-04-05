@@ -12,6 +12,12 @@ public class ProdutoService {
     private ProdutoRepositorio produtoRepositorio;
 
     public Produto addProduto(Produto produto) {
+        if (produto.getNome() == null || produto.getNome().isEmpty()) {
+            throw new IllegalArgumentException("Nome do produto não pode ser nulo ou vazio");
+        }
+        if (produto.getQuantidade() < 0) {
+            throw new IllegalArgumentException("A quantidade do produto não pode ser negativa");
+        }
         return produtoRepositorio.save(produto);
     }
 }
