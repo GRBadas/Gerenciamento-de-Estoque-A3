@@ -78,5 +78,6 @@ public class ProdutoServiceTest {
         assertEquals(18, listaRetornada.get(1).getQuantidade());
         assertEquals("Teclado", listaRetornada.get(2).getNome());
         assertEquals(9, listaRetornada.get(2).getQuantidade());
+
     }
 }
