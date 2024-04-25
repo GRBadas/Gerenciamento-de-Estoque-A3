@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -79,5 +80,16 @@ public class ProdutoServiceTest {
         assertEquals("Teclado", listaRetornada.get(2).getNome());
         assertEquals(9, listaRetornada.get(2).getQuantidade());
 
+    }
+
+    @Test
+    public void testAddProdutoNotFound() {
+        Produto produtoParaAdicionar = new Produto("Nome do produto", 10);
+        when(produtoRepositorio.save(produtoParaAdicionar)).thenReturn(null);
+
+        Produto produtoAdicionado = produtoService.addProduto(produtoParaAdicionar);
+
+        assertNull(produtoAdicionado);
+        verify(produtoRepositorio, times(1)).save(produtoParaAdicionar);
     }
 }
