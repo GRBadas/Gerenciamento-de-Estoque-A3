@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -68,3 +68,13 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+  versioning:
+    needs: release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Versioning Script
+        run: chmod +x .github/workflows/generateVersion.sh
