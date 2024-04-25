@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -23,5 +25,20 @@ public class ProdutoRepositoryTest {
         Produto produtoSalvo = produtoRepositorio.save(produto);
 
         assertNotNull(produtoSalvo.getId());
+    }
+
+    @Test
+    void testeEncontrarProdutoPorNome(){
+        Produto produto = new Produto();
+        produto.setNome("Produto de teste 2");
+        produto.setQuantidade(10);
+        produtoRepositorio.save(produto);
+
+        List<Produto> produtosEncontrados = produtoRepositorio.findByNome("Produto de teste 2");
+
+        assertFalse(produtosEncontrados.isEmpty());
+        assertEquals(1,produtosEncontrados.size());
+        assertEquals("Produto de teste 2", produtosEncontrados.get(0).getNome());
+
     }
 }
