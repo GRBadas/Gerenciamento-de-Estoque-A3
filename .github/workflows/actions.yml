@@ -5,8 +5,9 @@ on:
     branches:
       - master
       - Development
+      - release
   pull_request:
-    branches: [ master ]
+    branches: [ master, release ]
 
 jobs:
   build:
@@ -55,6 +56,10 @@ jobs:
           path: target/site/jacoco/index.html
 
   release:
+    on:
+      push:
+        branches:
+          -release
     needs: test
     runs-on: ubuntu-latest
 
