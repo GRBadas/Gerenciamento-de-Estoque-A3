@@ -72,6 +72,9 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Deploy Application
+        run: echo "Deploying application..."
+
   versioning:
     if: github.ref == 'refs/heads/release'
     needs: release
@@ -85,3 +88,22 @@ jobs:
         run: |
           chmod +x .github/workflows/generateVersion.sh
           .github/workflows/generateVersion.sh true
+
+  sonarqube:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn sonar:sonar -Dsonar.projectKey=my_project -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}

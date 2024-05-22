@@ -57,5 +57,11 @@ public class ProdutoRepositoryTest {
         assertEquals(20, atualizado.getQuantidade());
     }
 
+    @Test
+    void testBuscarProdutoPorNomeInexistente() {
+        List<Produto> produtos = produtoRepositorio.findByNome("Nome Inexistente");
+        assertTrue(produtos.isEmpty());
+    }
+
 
 }
