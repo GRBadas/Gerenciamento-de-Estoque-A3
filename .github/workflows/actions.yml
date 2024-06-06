@@ -57,9 +57,26 @@ jobs:
           name: jacoco-report
           path: target/site/jacoco/index.html
 
+  upload-ftp:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Upload JaCoCo report via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: target/site/jacoco/
+          server-dir: /public_html/Gerenciamento-de-Estoque-A3-master/
+
   release:
     if: github.ref == 'refs/heads/release'
-    needs: test
+    needs: upload-ftp
     runs-on: ubuntu-latest
 
     steps:
@@ -97,7 +114,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set  up JDK
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
