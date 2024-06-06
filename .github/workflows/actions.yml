@@ -51,13 +51,14 @@ jobs:
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
-      - name: List all files after tests
-        run: find target/
+      - name: List files in target directory
+        run: ls -R target/
 
       - name: Verify JaCoCo report directory
         run: |
           echo "Checking JaCoCo report directory"
           if [ -d "target/site/jacoco/" ]; then
+            echo "JaCoCo report directory exists"
             ls -l target/site/jacoco/
           else
             echo "JaCoCo report directory does not exist"
@@ -82,6 +83,7 @@ jobs:
         run: |
           echo "Checking JaCoCo report directory before upload"
           if [ -d "target/site/jacoco/" ]; then
+            echo "JaCoCo report directory exists"
             ls -l target/site/jacoco/
           else
             echo "JaCoCo report directory does not exist"
