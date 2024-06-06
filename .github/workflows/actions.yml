@@ -65,6 +65,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Create JaCoCo report directory
+        run: mkdir -p target/site/jacoco/
+
       - name: Upload JaCoCo report via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
