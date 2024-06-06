@@ -51,6 +51,11 @@ jobs:
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
+      - name: Verify JaCoCo report directory
+        run: |
+          ls -l target/site/jacoco/
+          echo "JaCoCo report directory verified."
+
       - name: Publish JaCoCo report
         uses: actions/upload-artifact@v2
         with:
@@ -64,6 +69,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Verify JaCoCo report directory before upload
+        run: ls -l target/site/jacoco/
 
       - name: Upload JaCoCo report via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
