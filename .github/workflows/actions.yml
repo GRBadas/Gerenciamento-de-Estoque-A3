@@ -93,9 +93,9 @@ jobs:
       - name: Upload JaCoCo report via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: joaobsjunior.com.br
+          username: aluno-ftp
+          password: a1b2c3d4@
           local-dir: target/site/jacoco/
           server-dir: /public_html/Gerenciamento-de-Estoque-A3-master/
 
