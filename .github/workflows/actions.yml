@@ -51,16 +51,24 @@ jobs:
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
+      - name: List all files after tests
+        run: find target/
+
       - name: Verify JaCoCo report directory
         run: |
-          ls -l target/site/jacoco/
-          echo "JaCoCo report directory verified."
+          echo "Checking JaCoCo report directory"
+          if [ -d "target/site/jacoco/" ]; then
+            ls -l target/site/jacoco/
+          else
+            echo "JaCoCo report directory does not exist"
+            exit 1
+          fi
 
       - name: Publish JaCoCo report
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: target/site/jacoco/index.html
+          path: target/site/jacoco/
 
   upload-ftp:
     needs: test
@@ -71,7 +79,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Verify JaCoCo report directory before upload
-        run: ls -l target/site/jacoco/
+        run: |
+          echo "Checking JaCoCo report directory before upload"
+          if [ -d "target/site/jacoco/" ]; then
+            ls -l target/site/jacoco/
+          else
+            echo "JaCoCo report directory does not exist"
+            exit 1
+          fi
 
       - name: Upload JaCoCo report via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
