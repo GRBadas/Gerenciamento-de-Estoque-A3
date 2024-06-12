@@ -1,0 +1,5 @@
+badas\dev\gerenciamento\de\estoque\repository\ProdutoRepositoryCRUDTest.class
+badas\dev\gerenciamento\de\estoque\controller\ProdutoControllerTest.class
+badas\dev\gerenciamento\de\estoque\GerenciamentoDeEstoqueApplicationTests.class
+badas\dev\gerenciamento\de\estoque\repository\ProdutoRepositoryTest.class
+badas\dev\gerenciamento\de\estoque\service\ProdutoServiceTest.class

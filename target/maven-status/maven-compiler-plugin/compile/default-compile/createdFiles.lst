@@ -1,0 +1,5 @@
+badas\dev\gerenciamento\de\estoque\repository\ProdutoRepositorio.class
+badas\dev\gerenciamento\de\estoque\GerenciamentoDeEstoqueApplication.class
+badas\dev\gerenciamento\de\estoque\service\ProdutoService.class
+badas\dev\gerenciamento\de\estoque\model\Produto.class
+badas\dev\gerenciamento\de\estoque\controller\ProdutoController.class

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: badas.dev.gerenciamento.de.estoque.repository.ProdutoRepositoryCRUDTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.785 s -- in badas.dev.gerenciamento.de.estoque.repository.ProdutoRepositoryCRUDTest
