@@ -120,7 +120,7 @@ jobs:
           .github/workflows/generateVersion.sh true
 
   sonarqube:
-    needs: test
+    needs: test-unit
     runs-on: ubuntu-latest
 
     steps:
