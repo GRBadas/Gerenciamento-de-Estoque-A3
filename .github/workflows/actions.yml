@@ -7,7 +7,9 @@ on:
       - Development
       - release
   pull_request:
-    branches: [ master, release ]
+    branches:
+      - master
+      - release
 
 jobs:
   build:
@@ -26,8 +28,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-  test:
-    needs: build
+  test-unit:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,9 +44,6 @@ jobs:
       - name: Run unit tests
         run: mvn test -B
 
-      - name: Run integration tests
-        run: mvn verify -B
-
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
@@ -53,14 +51,30 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: target/site/jacoco/index.html
+          path: target/site/jacoco/
 
-  release:
-    on:
-      push:
-        branches:
-          -release
-    needs: test
+  upload-ftp:
+    needs: test-unit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create JaCoCo report directory
+        run: mkdir -p target/site/jacoco/
+
+      - name: Upload JaCoCo report via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: joaobsjunior.com.br
+          username: aluno-ftp
+          password: a1b2c3d4@
+          local-dir: target/site/jacoco/
+          server-dir: /public_html/Gerenciamento-de-Estoque-A3-master/
+
+  test-integration:
+    if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
 
     steps:
@@ -73,13 +87,53 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Run integration tests
+        run: mvn verify -B
+
+      - name: Generate JaCoCo report for integration tests
+        run: mvn jacoco:report
+
+      - name: Publish JaCoCo report for integration tests
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report-integration
+          path: target/site/jacoco/
+
+  release:
+    if: github.ref == 'refs/heads/release'
+    needs: [upload-ftp, test-integration]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Application
+        run: echo "Deploying application..."
+
   versioning:
+    if: github.ref == 'refs/heads/release'
     needs: release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Versioning Script
+        run: |
+          chmod +x .github/workflows/generateVersion.sh
+          .github/workflows/generateVersion.sh true
+
+  sonarqube:
+    needs: test-unit
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Run Versioning Script
-        run: chmod +x .github/workflows/generateVersion.sh
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn sonar:sonar -Dsonar.projectKey=ProjetoA3 -Dsonar.organization=grbadas -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
