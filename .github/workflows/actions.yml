@@ -28,8 +28,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-  test:
-    needs: build
+  test-unit:
     runs-on: ubuntu-latest
 
     steps:
@@ -45,9 +44,6 @@ jobs:
       - name: Run unit tests
         run: mvn test -B
 
-      - name: Run integration tests
-        run: mvn verify -B
-
       - name: Generate JaCoCo report
         run: mvn jacoco:report
 
@@ -58,7 +54,7 @@ jobs:
           path: target/site/jacoco/
 
   upload-ftp:
-    needs: test
+    needs: test-unit
     runs-on: ubuntu-latest
 
     steps:
@@ -77,9 +73,8 @@ jobs:
           local-dir: target/site/jacoco/
           server-dir: /public_html/Gerenciamento-de-Estoque-A3-master/
 
-  release:
+  test-integration:
     if: github.ref == 'refs/heads/release'
-    needs: upload-ftp
     runs-on: ubuntu-latest
 
     steps:
@@ -92,6 +87,24 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Run integration tests
+        run: mvn verify -B
+
+      - name: Generate JaCoCo report for integration tests
+        run: mvn jacoco:report
+
+      - name: Publish JaCoCo report for integration tests
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report-integration
+          path: target/site/jacoco/
+
+  release:
+    if: github.ref == 'refs/heads/release'
+    needs: [upload-ftp, test-integration]
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Deploy Application
         run: echo "Deploying application..."
 
@@ -101,22 +114,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Run Versioning Script
         run: |
           chmod +x .github/workflows/generateVersion.sh
           .github/workflows/generateVersion.sh true
 
   sonarqube:
-    needs: test
+    needs: test-unit
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
