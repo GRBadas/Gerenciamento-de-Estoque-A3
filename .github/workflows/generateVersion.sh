@@ -4,6 +4,7 @@
 # major: breaking change
 # minor: feat, style
 # patch: build, fix, perf, refactor, revert
+GIT_TOKEN="${{ secrets.GIT_TOKEN }}"
 
 GENERATE_VERSION=$1
 echo "Generate version: $GENERATE_VERSION"
