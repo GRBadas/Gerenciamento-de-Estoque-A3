@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+env:
+  git_token: ${{ secrets.GIT_TOKEN }}
+
 jobs:
   versioning-master:
 
