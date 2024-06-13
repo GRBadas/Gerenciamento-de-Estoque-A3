@@ -110,8 +110,8 @@ jobs:
 
       - name: Run Versioning Script
         run: |
-          chmod +x .github/workflows/generateVersion.sh
-          .github/workflows/generateVersion.sh true
+          chmod +x Gerenciamento-de-Estoque-A3-master/.github/workflows/generateVersion.sh
+          Gerenciamento-de-Estoque-A3-master/.github/workflows/generateVersion.sh true
 
   sonarqube:
     needs: test-unit
