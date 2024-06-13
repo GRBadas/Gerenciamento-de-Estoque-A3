@@ -108,16 +108,24 @@ jobs:
       - name: Deploy Application
         run: echo "Deploying application..."
 
-  versioning:
-    if: github.ref == 'refs/heads/release'
-    needs: release
+  versioning-master:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Versioning Script
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Run Versioning Script on master
         run: |
           chmod +x .github/workflows/generateVersion.sh
-          .github/workflows/generateVersion.sh true
+          .github/workflows/generateVersion.sh false
 
   sonarqube:
     needs: test-unit
