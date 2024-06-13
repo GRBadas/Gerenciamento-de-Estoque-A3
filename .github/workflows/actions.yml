@@ -3,9 +3,7 @@ name: CI/CD
 on:
   push:
     branches:
-      - master
-      - Development
-      - release
+      - "*"
   pull_request:
     branches:
       - master
