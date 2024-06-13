@@ -41,7 +41,7 @@ push_newversion() {
         echo "Generating new version..."
         git tag $new_version
         git remote set-url origin https://${GIT_TOKEN}@github.com/GRBadas/Gerenciamento-de-Estoque-A3.git
-        git push origin $new_version
+        git push origin $new_version --quiet --follow-tags
     else
         echo "To generate a new version, you must send the argument \"true\""
     fi
