@@ -125,7 +125,7 @@ jobs:
       - name: Run Versioning Script on master
         run: |
           chmod +x .github/scripts/generateVersion.sh
-          .github/scripts/generateVersion.sh true
+          .github/scripts/generateVersion.sh false
 
   sonarqube:
     needs: test-unit
